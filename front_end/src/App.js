@@ -18,22 +18,18 @@ const App = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
-    if(chargeMass < 0) {
-        setError("Charge Mass should be non-negative")
-    }else {
-        setError("")
-        for (const [function_name, result_setter] of Object.entries(backend_functions)) {
-            const url = `${backend_path}/${function_name}?charge_mass_kg=${chargeMass}`;
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    result_setter(data);
-                })
-                .catch(error => {
-                    console.log(error)
-                })
-        }
+    setError("")
+    for (const [function_name, result_setter] of Object.entries(backend_functions)) {
+        const url = `${backend_path}/${function_name}?charge_mass_kg=${chargeMass}`;
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                result_setter(data);
+            })
+            .catch(error => {
+                console.log(error)
+                setError(error.message);
+            })
     }
   }
 
@@ -42,7 +38,7 @@ const App = () => {
       <form onSubmit={handleSubmit}>
         <label>
           Charge Mass (in kg):
-          <input type="number" value={chargeMass} onChange={e => setChargeMass(e.target.value)} />
+          <input type="number" value={chargeMass} min={0} onChange={e => setChargeMass(e.target.value)} />
         </label>
         <button type="submit">Submit</button>
       </form>
