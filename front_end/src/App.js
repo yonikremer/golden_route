@@ -25,12 +25,10 @@ const App = () => {
         setError("")
         for (const [function_name, result_setter] of Object.entries(backend_functions)) {
             const url = `${backend_path}/${function_name}?charge_mass_kg=${chargeMass}`;
-            console.log(url);
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
                     result_setter(data);
-                    console.log(data);
                 })
                 .catch(error => {
                     console.log(error)
