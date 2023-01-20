@@ -1,11 +1,20 @@
 """an HTTP server that allows you to use the pysics calculator in the business_logic.py file"""
 import fastapi
+from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
 from business_logic import calculate_acceleration, calculate_takeoff_distance, calculate_takeoff_time, \
     ChargeMassErrorTooBig, calculate_mass_to_destroy
 
 app = fastapi.FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/acceleration")
