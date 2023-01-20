@@ -53,7 +53,7 @@ def calculate_acceleration(charge_mass_kg: Real) -> Real:
 @check_charge_mass_input
 def calculate_takeoff_time(charge_mass_kg: Real) -> Real:
     """Calculate the time it takes to take off with a given charge mass.
-    raises ValueError if the plane can't take off in MAX_TAKEOFF_TIME_SEC."""
+    raises ChargeMassErrorTooBig if the plane can't take off in MAX_TAKEOFF_TIME_SEC."""
     acceleration_mps2 = calculate_acceleration(charge_mass_kg)
     takeoff_time_sec = TAKE_OFF_VELOCITY_MPS / acceleration_mps2
     if takeoff_time_sec > MAX_TAKEOFF_TIME_SEC:
