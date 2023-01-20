@@ -1,4 +1,15 @@
-from constants import MASS_NO_CHARGE_KG, MAX_TAKEOFF_TIME_SEC, TAKE_OFF_VELOCITY_MPS, ENGINES_FORCE_NEWTON, VELOCITY_0_MPS
+from constants import (
+    MASS_NO_CHARGE_KG,
+    MAX_TAKEOFF_TIME_SEC,
+    TAKE_OFF_VELOCITY_MPS,
+    ENGINES_FORCE_NEWTON,
+    VELOCITY_0_MPS
+)
+
+
+minimal_acceleration = TAKE_OFF_VELOCITY_MPS / MAX_TAKEOFF_TIME_SEC
+maximal_total_mass = ENGINES_FORCE_NEWTON / minimal_acceleration
+maximal_charge_mass = maximal_total_mass - MASS_NO_CHARGE_KG
 
 
 def calculate_acceleration(charge_mass_kg):
@@ -36,9 +47,6 @@ def calculate_mass_to_destroy(charge_mass_kg):
     raises ValueError if the plane can't take off in MAX_TAKEOFF_TIME_SEC."""
     if charge_mass_kg < 0:
         raise ValueError("The charge mass must non negative.")
-    minimal_acceleration = TAKE_OFF_VELOCITY_MPS / MAX_TAKEOFF_TIME_SEC
-    maximal_total_mass = ENGINES_FORCE_NEWTON / minimal_acceleration
-    maximal_charge_mass = maximal_total_mass - MASS_NO_CHARGE_KG
     if charge_mass_kg <= maximal_charge_mass:
         # you don't need to destroy any charge
         return 0
