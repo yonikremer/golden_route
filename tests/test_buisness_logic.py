@@ -19,9 +19,15 @@ class MyTestCase(unittest.TestCase):
         acceleration_zero_mass = business_logic.calculate_acceleration(0)
         take_off_time_zero_mass = business_logic.calculate_takeoff_time(0)
         self.assertEqual(business_logic.calculate_takeoff_distance(0),
-                         (VELOCITY_0_MPS * take_off_time_zero_mass) + (acceleration_zero_mass * take_off_time_zero_mass ** 2) / 2)
+                         (VELOCITY_0_MPS * take_off_time_zero_mass) + (
+                                     acceleration_zero_mass * take_off_time_zero_mass ** 2) / 2)
         self.assertRaises(ValueError, business_logic.calculate_takeoff_distance, -1)
         self.assertRaises(ValueError, business_logic.calculate_takeoff_distance, 1000000)
+
+    def test_calculate_mass_to_destroy(self):
+        self.assertEqual(business_logic.calculate_mass_to_destroy(0), 0)
+        self.assertRaises(ValueError, business_logic.calculate_mass_to_destroy, -1)
+        self.assertEqual(business_logic.calculate_mass_to_destroy(business_logic.maximal_charge_mass + 1), 1)
 
 
 if __name__ == '__main__':
