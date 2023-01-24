@@ -1,4 +1,6 @@
 """an HTTP server that allows you to use the pysics calculator in the business_logic.py file"""
+from numbers import Real
+
 import fastapi
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
@@ -19,7 +21,10 @@ app.add_middleware(
 
 @app.get("/acceleration")
 @app.get("/acceleration/{charge_mass_kg}")
-def acceleration(charge_mass_kg: float):
+def acceleration(charge_mass_kg: Real):
+    """Calculate the acceleration of the plane with a given charge mass.
+    Raises:
+        InvalidChargeMass: if the charge mass is not a non-negative number."""
     try:
         return calculate_acceleration(charge_mass_kg)
     except ValueError as e:
@@ -28,7 +33,12 @@ def acceleration(charge_mass_kg: float):
 
 @app.get("/takeoff_time")
 @app.get("/takeoff_time/{charge_mass_kg}")
-def takeoff_time(charge_mass_kg: float):
+def takeoff_time(charge_mass_kg: Real):
+    """Gets the mass of the charge in kilograms (non-negative number).
+    Calculate the time it takes to take off with the charge mass.
+    Raises:
+        ChargeMassErrorTooBig if the plane can't take off in MAX_TAKEOFF_TIME_SEC.
+        InvalidChargeMass: if the charge mass is not a non-negative number."""
     try:
         return calculate_takeoff_time(charge_mass_kg)
     except ChargeMassErrorTooBig as e:
@@ -39,7 +49,14 @@ def takeoff_time(charge_mass_kg: float):
 
 @app.get("/takeoff_distance")
 @app.get("/takeoff_distance/{charge_mass_kg}")
-def takeoff_distance(charge_mass_kg: float):
+def takeoff_distance(charge_mass_kg: Real):
+    """Gets the mass of the charge in kilograms (non-negative number).
+        Calculate the distance it takes to take off with a given charge mass.
+        raises ValueError if the plane can't take off in MAX_TAKEOFF_TIME_SEC.
+        Raises:
+            ChargeMassErrorTooBig: if the plane can't take off in MAX_TAKEOFF_TIME_SEC.
+            InvalidChargeMass: if the charge mass is not a non-negative number.
+        """
     try:
         return calculate_takeoff_distance(charge_mass_kg)
     except ValueError as e:
@@ -48,7 +65,14 @@ def takeoff_distance(charge_mass_kg: float):
 
 @app.get("/mass_to_destroy")
 @app.get("/mass_to_destroy/{charge_mass_kg}")
-def mass_to_destroy(charge_mass_kg: float):
+def mass_to_destroy(charge_mass_kg: Real):
+    """Gets the mass of the charge in kilograms (non-negative number).
+    If the plane can take off in time,
+    You don't need to destroy any charge, so the function returns 0.
+    Else, the function returns the mass of the charge that you need to destroy
+     in order to take off in time.
+     Raises:
+         InvalidChargeMass: if the charge mass is not a non-negative number."""
     try:
         return calculate_mass_to_destroy(charge_mass_kg)
     except ValueError as e:
