@@ -77,7 +77,3 @@ def mass_to_destroy(charge_mass_kg: Real):
         return calculate_mass_to_destroy(charge_mass_kg)
     except ValueError as e:
         return fastapi.Response(status_code=400, content=str(e))
-
-
-if __name__ == "__main__":
-    uvicorn.run(app, port=8000)
