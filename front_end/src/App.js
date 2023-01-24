@@ -6,6 +6,7 @@ const App = () => {
   const [takeoffTime, setTakeoffTime] = useState('');
   const [takeoffDistance, setTakeoffDistance] = useState('');
   const [massToDestroy, setMassToDestroy] = useState('');
+  const [resultsHTML, setResultsHTML] = useState(<div></div>);
   const [error, setError] = useState('');
   const backend_path = 'http://127.0.0.1:8000';
     let backend_functions;
@@ -31,23 +32,42 @@ const App = () => {
                 setError(error.message);
             })
     }
+    createResultsHTML()
+  }
+
+  const createResultsHTML = () => {
+      let result;
+      if (massToDestroy === undefined || massToDestroy === null || massToDestroy === 0) {
+          console.log("massToDestroy is " + massToDestroy);
+          console.log("type off massToDestroy is " + typeof massToDestroy);
+          result =
+              <div>
+                {acceleration && <div>Acceleration: {acceleration} meters/seconds^2</div>}
+                {takeoffTime && <div>Takeoff Time: {takeoffTime} seconds </div>}
+                {takeoffDistance && <div>Takeoff Distance: {takeoffDistance} meters</div>}
+              </div>;
+      }
+      else {
+          result =
+              <div>
+                {massToDestroy && <div>You need to destroy: {massToDestroy} kg in order to takeoff in time.</div>}
+              </div>;
+      }
+      setResultsHTML(result);
   }
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Charge Mass (in kg):
-          <input type="number" value={chargeMass} min={0} onChange={e => setChargeMass(e.target.value)} />
-        </label>
-        <button type="submit">Submit</button>
-      </form>
-      {error && <div>{error}</div>}
-      {acceleration && <div>Acceleration: {acceleration}</div>}
-      {takeoffTime && <div>Takeoff Time: {takeoffTime}</div>}
-      {takeoffDistance && <div>Takeoff Distance: {takeoffDistance}</div>}
-      {massToDestroy && <div>Mass To Destroy: {massToDestroy}</div>}
-    </div>
+      <div>
+          <form onSubmit={handleSubmit}>
+              <label>
+                 Charge Mass (in kg):
+                <input type="number" value={chargeMass} min={0} onChange={e => setChargeMass(e.target.value)} />
+              </label>
+              <button type="submit">Submit</button>
+          </form>
+          {error && <div>{error}</div>}
+          {resultsHTML}
+      </div>
   );
 }
 
