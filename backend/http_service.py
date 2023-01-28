@@ -3,7 +3,6 @@ from numbers import Real
 
 import fastapi
 from fastapi.middleware.cors import CORSMiddleware
-import uvicorn
 
 from business_logic import calculate_acceleration, calculate_takeoff_distance, calculate_takeoff_time, \
     ChargeMassErrorTooBig, calculate_mass_to_destroy
