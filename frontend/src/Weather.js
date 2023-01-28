@@ -3,7 +3,6 @@ import {Link} from 'react-router-dom';
 
 
 const Weather = () => {
-    console.log('Weather')
     const [date, setDate] = useState('');
     const [temperatures, setTemperatures] = useState([]);
     const [error, setError] = useState('');
@@ -51,35 +50,26 @@ const Weather = () => {
         const date_un_formatted = new Date(date);
         const date_formatted = date_un_formatted.toISOString().split('T')[0];
         const full_request_url = `${weather_api_path_base}?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m&start_date=${date_formatted}&end_date=${date_formatted}`;
-        console.log("full_request_url: " + full_request_url);
         fetch(full_request_url)
             .then(
                 response => {
                     // check for 400 error code
                     if (response.status === 400) {
-                        console.log("response: " + response);
                         response.json().then(data => {
-                            console.log("data: " + data);
                             setError(data["message"]);
                         });
                         setUserMessage("Your is probably not in the allowed range. Please try again with a closer date.");
                         return;
                     }
-                    console.log("response: " + response);
                     response.json().then(data => {
-                        console.log("data: " + data);
-                        console.log("temperature_2m: " + data["hourly"]["temperature_2m"]);
                         setTemperatures(data["hourly"]["temperature_2m"]);
                     });
                 }
             )
             .catch(error => {
-                console.log(error);
                 setError("Error getting weather data");
             });
-        console.log("temperatures: " + temperatures);
         const goodTakeOffTimes = hours.filter((time, index) => temperatures[index] >= minTemperature && temperatures[index] <= maxTemperature);
-        console.log("goodTakeOffTimes: " + goodTakeOffTimes);
         if (goodTakeOffTimes.length === 0) {
             const minTemperature = Math.min(...temperatures);
             const maxTemperature = Math.max(...temperatures);

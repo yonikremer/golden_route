@@ -1,7 +1,6 @@
 import React, {useState} from "react";
 
 const Main = () => {
-    console.log("Main");
     const [chargeMass, setChargeMass] = useState('');
     const [acceleration, setAcceleration] = useState('');
     const [takeoffTime, setTakeoffTime] = useState('');
@@ -29,7 +28,6 @@ const Main = () => {
                     result_setter(data);
                 })
                 .catch(error => {
-                    console.log(error)
                     setError(error.message);
                 })
         }
@@ -39,8 +37,6 @@ const Main = () => {
     const createResultsHTML = () => {
         let result;
         if (massToDestroy === undefined || massToDestroy === null || massToDestroy === 0) {
-            console.log("massToDestroy is " + massToDestroy);
-            console.log("type off massToDestroy is " + typeof massToDestroy);
             result =
                 <div>
                     {acceleration && <div>Acceleration: {acceleration} meters/seconds^2</div>}
