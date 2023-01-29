@@ -1,7 +1,7 @@
 from numbers import Real
 from typing import Callable
 
-from constants import (
+from backend.constants import (
     MASS_NO_CHARGE_KG,
     MAX_TAKEOFF_TIME_SEC,
     TAKE_OFF_VELOCITY_MPS,
@@ -39,6 +39,7 @@ def is_valid_charge_mass_string(charge_mass_kg_str: str) -> bool:
 def check_charge_mass_input(func: Callable):
     """ A decorator Check if the charge mass input to the function is valid.
     If not, raise an InvalidChargeMass exception."""
+
     def wrapper(*args, **kwargs):
         charge_mass_kg = kwargs["charge_mass_kg"] if "charge_mass_kg" in kwargs else args[0]
         if not is_valid_charge_mass(charge_mass_kg):
@@ -48,7 +49,20 @@ def check_charge_mass_input(func: Callable):
     return wrapper
 
 
+def check_charge_mass_too_big(func: Callable):
+    """A decorator that checks if the charge mass is too big."""
+
+    def wrapper(*args, **kwargs):
+        charge_mass_kg = kwargs["charge_mass_kg"] if "charge_mass_kg" in kwargs else args[0]
+        if charge_mass_kg > maximal_charge_mass:
+            raise ChargeMassErrorTooBig("The charge mass is too big.")
+        return func(*args, **kwargs)
+
+    return wrapper
+
+
 @check_charge_mass_input
+@check_charge_mass_too_big
 def calculate_acceleration(charge_mass_kg: Real) -> Real:
     """Calculate the acceleration of the plane with a given charge mass.
     Raises:
@@ -58,6 +72,7 @@ def calculate_acceleration(charge_mass_kg: Real) -> Real:
 
 
 @check_charge_mass_input
+@check_charge_mass_too_big
 def calculate_takeoff_time(charge_mass_kg: Real) -> Real:
     """Gets the mass of the charge in kilograms (non-negative number).
     Calculate the time it takes to take off with the charge mass.
@@ -72,6 +87,7 @@ def calculate_takeoff_time(charge_mass_kg: Real) -> Real:
 
 
 @check_charge_mass_input
+@check_charge_mass_too_big
 def calculate_takeoff_distance(charge_mass_kg: Real) -> Real:
     """Gets the mass of the charge in kilograms (non-negative number).
     Calculate the distance it takes to take off with a given charge mass.
