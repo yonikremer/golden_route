@@ -1,9 +1,7 @@
 FROM python:3.9-slim-buster
 
-COPY requirements.txt .
+COPY /backend/ .
 RUN pip install --no-cache-dir -r requirements.txt
-
-COPY http_service.py .
 
 EXPOSE 8000
 

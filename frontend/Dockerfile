@@ -1,13 +1,14 @@
 FROM node:14
 
-WORKDIR /app
+WORKDIR /golden_route/frontend
 
-COPY package.json package-lock.json ./
+COPY /frontend/package.json ./
+COPY /frontend/package-lock.json ./
+COPY /frontend/public ./public
+
 RUN npm install
 
 COPY . .
-
-RUN npm run build
 
 EXPOSE 3000
 
