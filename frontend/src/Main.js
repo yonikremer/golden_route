@@ -3,7 +3,6 @@ import {Link} from "react-router-dom";
 
 const Main = () => {
     const [chargeMass, setChargeMass] = useState('');
-    const [acceleration, setAcceleration] = useState('');
     const [takeoffTime, setTakeoffTime] = useState('');
     const [takeoffDistance, setTakeoffDistance] = useState('');
     const [massToDestroy, setMassToDestroy] = useState('');
@@ -12,7 +11,6 @@ const Main = () => {
     const backend_path = 'http://127.0.0.1:8000';
     let backend_functions;
     backend_functions = {
-        "acceleration": setAcceleration,
         "takeoff_time": setTakeoffTime,
         "takeoff_distance": setTakeoffDistance,
     };
@@ -71,7 +69,6 @@ const Main = () => {
         if (massToDestroy === undefined || massToDestroy === null || massToDestroy === 0) {
             result =
                 <div>
-                    {acceleration && <div>Acceleration: {acceleration} meters/seconds^2</div>}
                     {takeoffTime && <div>Takeoff Time: {takeoffTime} seconds </div>}
                     {takeoffDistance && <div>Takeoff Distance: {takeoffDistance} meters</div>}
                 </div>;
@@ -90,7 +87,7 @@ const Main = () => {
             <p>
                 Enter the mass of the charge in kilograms.
                 If you can take off in time, the calculator will return
-                the acceleration, takeoff time, and takeoff distance.
+                the takeoff time and takeoff distance.
                 If you cannot take off in time, the calculator will return the mass of the charge you need to destroy
                 in order to take off in time.
             </p>

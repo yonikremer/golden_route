@@ -6,7 +6,6 @@ import pytest
 from fastapi.testclient import TestClient
 
 from backend.business_logic import (
-    calculate_acceleration,
     maximal_charge_mass,
     calculate_takeoff_time,
     calculate_takeoff_distance,
@@ -15,9 +14,8 @@ from backend.business_logic import (
 from backend.http_service import app
 
 
-function_names: Iterable[str] = ("acceleration", "takeoff_time", "takeoff_distance", "mass_to_destroy")
+function_names: Iterable[str] = ("takeoff_time", "takeoff_distance", "mass_to_destroy")
 function_name_to_function = {
-    "acceleration": calculate_acceleration,
     "takeoff_time": calculate_takeoff_time,
     "takeoff_distance": calculate_takeoff_distance,
     "mass_to_destroy": calculate_mass_to_destroy,
@@ -56,7 +54,7 @@ def test_bad_requests(charge_mass):
 
 def test_charge_mass_too_big():
     big_charge_mass = maximal_charge_mass + 1
-    for stat_function in ("takeoff_time", "takeoff_distance", "acceleration"):
+    for stat_function in ("takeoff_time", "takeoff_distance"):
         response = client.get(f"/{stat_function}/{big_charge_mass}")
         assert response.status_code == 400
         assert "The charge mass is too big." in response.text

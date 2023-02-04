@@ -1,13 +1,22 @@
 from numbers import Real
 from typing import Callable
 
-from constants import (
-    MASS_NO_CHARGE_KG,
-    MAX_TAKEOFF_TIME_SEC,
-    TAKE_OFF_VELOCITY_MPS,
-    ENGINES_FORCE_NEWTON,
-    VELOCITY_0_MPS
-)
+try:
+    from constants import (
+        MASS_NO_CHARGE_KG,
+        MAX_TAKEOFF_TIME_SEC,
+        TAKE_OFF_VELOCITY_MPS,
+        ENGINES_FORCE_NEWTON,
+        VELOCITY_0_MPS,
+    )
+except ImportError:
+    from backend.constants import (
+        MASS_NO_CHARGE_KG,
+        MAX_TAKEOFF_TIME_SEC,
+        TAKE_OFF_VELOCITY_MPS,
+        ENGINES_FORCE_NEWTON,
+        VELOCITY_0_MPS,
+    )
 
 minimal_acceleration = TAKE_OFF_VELOCITY_MPS / MAX_TAKEOFF_TIME_SEC
 maximal_total_mass = ENGINES_FORCE_NEWTON / minimal_acceleration

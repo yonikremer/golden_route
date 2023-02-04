@@ -4,13 +4,20 @@ from typing import Union
 import fastapi
 from fastapi.middleware.cors import CORSMiddleware
 
-from business_logic import (
-    calculate_acceleration,
-    calculate_takeoff_distance,
-    calculate_takeoff_time,
-    ChargeMassErrorTooBig,
-    calculate_mass_to_destroy
-)
+try:
+    from business_logic import (
+        calculate_takeoff_distance,
+        calculate_takeoff_time,
+        ChargeMassErrorTooBig,
+        calculate_mass_to_destroy
+    )
+except ImportError:
+    from backend.business_logic import (
+        calculate_takeoff_distance,
+        calculate_takeoff_time,
+        ChargeMassErrorTooBig,
+        calculate_mass_to_destroy
+    )
 
 app = fastapi.FastAPI()
 
@@ -23,18 +30,6 @@ app.add_middleware(
 )
 
 NumberType = Union[int, float]
-
-
-@app.get("/acceleration")
-@app.get("/acceleration/{charge_mass_kg}")
-def acceleration(charge_mass_kg: NumberType):
-    """Calculate the acceleration of the plane with a given charge mass.
-    Raises:
-        InvalidChargeMass: if the charge mass is not a non-negative number."""
-    try:
-        return calculate_acceleration(charge_mass_kg)
-    except ValueError as e:
-        return fastapi.Response(status_code=400, content=str(e))
 
 
 @app.get("/takeoff_time")
