@@ -1,31 +1,32 @@
 import sys
-from os.path import dirname, abspath
+from os.path import abspath, dirname
 
 from pytest import approx, main, raises
+
+from backend.business_logic import (
+    ChargeMassErrorTooBig,
+    InvalidChargeMass,
+    calculate_acceleration,
+    calculate_mass_to_destroy,
+    calculate_takeoff_distance,
+    calculate_takeoff_time,
+    is_valid_charge_mass,
+    is_valid_charge_mass_string,
+    maximal_charge_mass,
+    maximal_total_mass,
+    minimal_acceleration,
+)
+from backend.constants import (
+    ENGINES_FORCE_NEWTON,
+    MASS_NO_CHARGE_KG,
+    MAX_TAKEOFF_TIME_SEC,
+    TAKE_OFF_VELOCITY_MPS,
+    VELOCITY_0_MPS,
+)
 
 test_directory = dirname(abspath(__file__))
 project_directory = dirname(test_directory)
 sys.path.append(project_directory)
-
-from backend.constants import (
-    MASS_NO_CHARGE_KG,
-    MAX_TAKEOFF_TIME_SEC,
-    TAKE_OFF_VELOCITY_MPS,
-    ENGINES_FORCE_NEWTON,
-    VELOCITY_0_MPS,
-)
-
-from backend.business_logic import (
-    is_valid_charge_mass,
-    calculate_acceleration,
-    is_valid_charge_mass_string,
-    minimal_acceleration,
-    maximal_total_mass,
-    maximal_charge_mass,
-    calculate_takeoff_time,
-    calculate_takeoff_distance,
-    calculate_mass_to_destroy, ChargeMassErrorTooBig, InvalidChargeMass,
-)
 
 
 def test_minimal_acceleration():
@@ -61,9 +62,11 @@ def test_is_valid_charge_mass_string():
 
 
 def test_calculate_acceleration():
-    assert calculate_acceleration(0) == ENGINES_FORCE_NEWTON / MASS_NO_CHARGE_KG
+    assert calculate_acceleration(
+        0) == ENGINES_FORCE_NEWTON / MASS_NO_CHARGE_KG
     assert calculate_acceleration(maximal_charge_mass) == minimal_acceleration
-    assert calculate_acceleration(1.11) == ENGINES_FORCE_NEWTON / (MASS_NO_CHARGE_KG + 1.11)
+    assert calculate_acceleration(
+        1.11) == ENGINES_FORCE_NEWTON / (MASS_NO_CHARGE_KG + 1.11)
     with raises(InvalidChargeMass):
         calculate_acceleration(-1)
     with raises(ChargeMassErrorTooBig):
@@ -71,8 +74,10 @@ def test_calculate_acceleration():
 
 
 def test_calculate_takeoff_time():
-    assert calculate_takeoff_time(0) == TAKE_OFF_VELOCITY_MPS / (ENGINES_FORCE_NEWTON / MASS_NO_CHARGE_KG)
-    assert calculate_takeoff_time(maximal_charge_mass) == approx(MAX_TAKEOFF_TIME_SEC)
+    assert calculate_takeoff_time(0) == TAKE_OFF_VELOCITY_MPS / (
+        ENGINES_FORCE_NEWTON / MASS_NO_CHARGE_KG)
+    assert calculate_takeoff_time(maximal_charge_mass) == approx(
+        MAX_TAKEOFF_TIME_SEC)
     with raises(InvalidChargeMass):
         calculate_takeoff_time(-1)
     with raises(ChargeMassErrorTooBig):
@@ -82,8 +87,11 @@ def test_calculate_takeoff_time():
 def test_calculate_takeoff_distance():
     acceleration_zero_mass = calculate_acceleration(0)
     take_off_time_zero_mass = calculate_takeoff_time(0)
-    assert (calculate_takeoff_distance(0), (VELOCITY_0_MPS * take_off_time_zero_mass) + (
-            acceleration_zero_mass * take_off_time_zero_mass ** 2) / 2)
+    assert (
+        calculate_takeoff_distance(0),
+        (VELOCITY_0_MPS * take_off_time_zero_mass) +
+        (acceleration_zero_mass * take_off_time_zero_mass**2) / 2,
+    )
     with raises(InvalidChargeMass):
         calculate_takeoff_distance(-1)
     with raises(ChargeMassErrorTooBig):
@@ -98,5 +106,5 @@ def test_calculate_mass_to_destroy():
     assert calculate_mass_to_destroy(maximal_charge_mass + 1) == 1
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
