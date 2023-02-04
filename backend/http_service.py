@@ -2,15 +2,14 @@
 from typing import Union
 
 import fastapi
-from fastapi.middleware.cors import CORSMiddleware
-
 from business_logic import (
+    ChargeMassErrorTooBig,
     calculate_acceleration,
+    calculate_mass_to_destroy,
     calculate_takeoff_distance,
     calculate_takeoff_time,
-    ChargeMassErrorTooBig,
-    calculate_mass_to_destroy
 )
+from fastapi.middleware.cors import CORSMiddleware
 
 app = fastapi.FastAPI()
 
@@ -57,12 +56,12 @@ def takeoff_time(charge_mass_kg: NumberType):
 @app.get("/takeoff_distance/{charge_mass_kg}")
 def takeoff_distance(charge_mass_kg: NumberType):
     """Gets the mass of the charge in kilograms (non-negative number).
-        Calculate the distance it takes to take off with a given charge mass.
-        raises ValueError if the plane can't take off in MAX_TAKEOFF_TIME_SEC.
-        Raises:
-            ChargeMassErrorTooBig: if the plane can't take off in MAX_TAKEOFF_TIME_SEC.
-            InvalidChargeMass: if the charge mass is not a non-negative number.
-        """
+    Calculate the distance it takes to take off with a given charge mass.
+    raises ValueError if the plane can't take off in MAX_TAKEOFF_TIME_SEC.
+    Raises:
+        ChargeMassErrorTooBig: if the plane can't take off in MAX_TAKEOFF_TIME_SEC.
+        InvalidChargeMass: if the charge mass is not a non-negative number.
+    """
     try:
         return calculate_takeoff_distance(charge_mass_kg)
     except ValueError as e:
