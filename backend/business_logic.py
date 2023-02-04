@@ -2,11 +2,11 @@ from numbers import Real
 from typing import Callable
 
 from backend.constants import (
+    ENGINES_FORCE_NEWTON,
     MASS_NO_CHARGE_KG,
     MAX_TAKEOFF_TIME_SEC,
     TAKE_OFF_VELOCITY_MPS,
-    ENGINES_FORCE_NEWTON,
-    VELOCITY_0_MPS
+    VELOCITY_0_MPS,
 )
 
 minimal_acceleration = TAKE_OFF_VELOCITY_MPS / MAX_TAKEOFF_TIME_SEC
@@ -37,13 +37,15 @@ def is_valid_charge_mass_string(charge_mass_kg_str: str) -> bool:
 
 
 def check_charge_mass_input(func: Callable):
-    """ A decorator Check if the charge mass input to the function is valid.
+    """A decorator Check if the charge mass input to the function is valid.
     If not, raise an InvalidChargeMass exception."""
 
     def wrapper(*args, **kwargs):
-        charge_mass_kg = kwargs["charge_mass_kg"] if "charge_mass_kg" in kwargs else args[0]
+        charge_mass_kg = (kwargs["charge_mass_kg"]
+                          if "charge_mass_kg" in kwargs else args[0])
         if not is_valid_charge_mass(charge_mass_kg):
-            raise InvalidChargeMass("The charge mass must be a non-negative number.")
+            raise InvalidChargeMass(
+                "The charge mass must be a non-negative number.")
         return func(*args, **kwargs)
 
     return wrapper
@@ -53,7 +55,8 @@ def check_charge_mass_too_big(func: Callable):
     """A decorator that checks if the charge mass is too big."""
 
     def wrapper(*args, **kwargs):
-        charge_mass_kg = kwargs["charge_mass_kg"] if "charge_mass_kg" in kwargs else args[0]
+        charge_mass_kg = (kwargs["charge_mass_kg"]
+                          if "charge_mass_kg" in kwargs else args[0])
         if charge_mass_kg > maximal_charge_mass:
             raise ChargeMassErrorTooBig("The charge mass is too big.")
         return func(*args, **kwargs)
@@ -98,7 +101,8 @@ def calculate_takeoff_distance(charge_mass_kg: Real) -> Real:
     """
     acceleration_mps2 = calculate_acceleration(charge_mass_kg)
     takeoff_time_sec = calculate_takeoff_time(charge_mass_kg)
-    return (VELOCITY_0_MPS * takeoff_time_sec) + (acceleration_mps2 * takeoff_time_sec ** 2) / 2
+    return (VELOCITY_0_MPS *
+            takeoff_time_sec) + (acceleration_mps2 * takeoff_time_sec**2) / 2
 
 
 @check_charge_mass_input
