@@ -12,8 +12,8 @@ const Weather = () => {
     const latitude = 30;
     const longitude = 35;
 
-    const minTemperature = 15;
-    const maxTemperature = 30;
+    const minAllowedTemperatureCelsius = 15;
+    const AllowedTemperatureCelsius = 30;
 
     const hours = [
         "00:00",
@@ -62,22 +62,28 @@ const Weather = () => {
                         return;
                     }
                     response.json().then(data => {
-                        setTemperatures(data["hourly"]["temperature_2m"]);
+                        let temperaturesByHour = data["hourly"]["temperature_2m"];
+                        if (temperaturesByHour.length === 0){
+                            setError("No data for the selected date");
+                            setUserMessage("Please try again with a date closer to today.");
+                            return;
+                        }
+                        setTemperatures(temperaturesByHour);
                     });
                 }
             )
             .catch(error => {
-                setError("Error getting weather data");
+                setError("Error getting weather data" + error);
             });
-        const goodTakeOffTimes = hours.filter((time, index) => temperatures[index] >= minTemperature && temperatures[index] <= maxTemperature);
+        const goodTakeOffTimes = hours.filter((time, index) => temperatures[index] >= minAllowedTemperatureCelsius && temperatures[index] <= AllowedTemperatureCelsius);
         if (goodTakeOffTimes.length === 0) {
-            const minTemperature = Math.min(...temperatures);
-            const maxTemperature = Math.max(...temperatures);
+            const minTemperatureInSelectedDate = Math.min(...temperatures);
+            const maxTemperatureInSelectedDate = Math.max(...temperatures);
             setUserMessage("You can't take off in the selected date, " +
                 "the temperatures in the selected date are between "
-                + minTemperature + " and " + maxTemperature + " degrees Celsius."
-                + "Which is not in the allowed range of " + minTemperature + " and "
-                + maxTemperature + " degrees Celsius."
+                + minTemperatureInSelectedDate + " and " + maxTemperatureInSelectedDate + " degrees Celsius."
+                + "Which is not in the allowed range of " + minAllowedTemperatureCelsius + " and "
+                + AllowedTemperatureCelsius + " degrees Celsius."
             );
         }
         else{
