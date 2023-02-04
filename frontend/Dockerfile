@@ -1,19 +1,18 @@
 FROM node:14
+RUN npm install -g serve
 
 WORKDIR /golden_route/frontend
 
+EXPOSE 3000
+
+CMD serve -s build -l 3000
+
 COPY /frontend/package.json ./
 COPY /frontend/package-lock.json ./
-COPY /frontend/public ./public
-COPY /frontend/src ./src
 
 RUN npm install
 
-COPY . .
-
-EXPOSE 3000
+COPY /frontend/public ./public
+COPY /frontend/src ./src
 
 RUN npm run build
-# install serve
-RUN npm install -g serve
-CMD serve -s build -l 3000
