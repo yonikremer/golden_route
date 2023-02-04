@@ -58,7 +58,7 @@ const Weather = () => {
                         response.json().then(data => {
                             setError(data["message"]);
                         });
-                        setUserMessage("Your is probably not in the allowed range. Please try again with a closer date.");
+                        setUserMessage("Your date is probably not in the allowed range. Please try again with a closer date.");
                         return;
                     }
                     response.json().then(data => {
