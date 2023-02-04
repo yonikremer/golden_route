@@ -12,7 +12,6 @@ const Main = () => {
     let backend_functions;
     backend_functions = {
         "acceleration": setAcceleration,
-        "mass_to_destroy": setMassToDestroy,
         "takeoff_time": setTakeoffTime,
         "takeoff_distance": setTakeoffDistance,
     };
@@ -20,17 +19,49 @@ const Main = () => {
     const handleSubmit = (event) => {
         event.preventDefault();
         setError("")
+        const url = `${backend_path}/mass_to_destroy?charge_mass_kg=${chargeMass}`;
+        fetch(url)
+            .then(
+                response => {
+                    // check for 400 error code
+                    if (response.status === 400) {
+                        response.json().then(data => {
+                            setError(data["message"]);
+                        });
+                        return;
+                    }
+                    response.json().then(data => {
+                        setMassToDestroy(data)
+                    });
+                }
+            )
+        .catch(error => {
+            setError(error.message);
+        });
+        if (massToDestroy > 0) {
+            createResultsHTML();
+            return;
+        }
         for (const [function_name, result_setter] of Object.entries(backend_functions)) {
             const url = `${backend_path}/${function_name}?charge_mass_kg=${chargeMass}`;
             fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    result_setter(data);
+                .then(response => {
+                    // check for 400 error code
+                    if (response.status === 400) {
+                        response.json().then(data => {
+                            setError(data["message"]);
+                        });
+                        return;
+                    }
+                    response.json()
+                        .then(data => {
+                            result_setter(data);
+                        })
+                        .catch(error => {
+                            setError(error.message);
+                        })
                 })
-                .catch(error => {
-                    setError(error.message);
-                })
-        }
+            }
         createResultsHTML()
     }
 
