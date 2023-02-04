@@ -1,20 +1,20 @@
 """A test file that runs the HTTP service and tests it with HTTP requests."""
 from numbers import Real
-from typing import Iterable, Any
+from typing import Any, Iterable
 
 import pytest
 from fastapi.testclient import TestClient
 
 from backend.business_logic import (
-    maximal_charge_mass,
-    calculate_takeoff_time,
-    calculate_takeoff_distance,
     calculate_mass_to_destroy,
+    calculate_takeoff_distance,
+    calculate_takeoff_time,
+    maximal_charge_mass,
 )
 from backend.http_service import app
 
-
-function_names: Iterable[str] = ("takeoff_time", "takeoff_distance", "mass_to_destroy")
+function_names: Iterable[str] = ("takeoff_time", "takeoff_distance",
+                                 "mass_to_destroy")
 function_name_to_function = {
     "takeoff_time": calculate_takeoff_time,
     "takeoff_distance": calculate_takeoff_distance,
