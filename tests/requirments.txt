@@ -1,0 +1,3 @@
+--requirement ../backend/requirements.txt
+pytest
+fastapi
