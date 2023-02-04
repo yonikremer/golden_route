@@ -4,22 +4,13 @@ from typing import Union
 import fastapi
 from fastapi.middleware.cors import CORSMiddleware
 
-try:
-    from backend.business_logic import (
-        calculate_acceleration,
-        calculate_takeoff_distance,
-        calculate_takeoff_time,
-        ChargeMassErrorTooBig,
-        calculate_mass_to_destroy
-    )
-except ModuleNotFoundError:
-    from business_logic import (
-        calculate_acceleration,
-        calculate_takeoff_distance,
-        calculate_takeoff_time,
-        ChargeMassErrorTooBig,
-        calculate_mass_to_destroy
-    )
+from business_logic import (
+    calculate_acceleration,
+    calculate_takeoff_distance,
+    calculate_takeoff_time,
+    ChargeMassErrorTooBig,
+    calculate_mass_to_destroy
+)
 
 app = fastapi.FastAPI()
 

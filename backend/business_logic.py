@@ -1,7 +1,7 @@
 from numbers import Real
 from typing import Callable
 
-from backend.constants import (
+from constants import (
     MASS_NO_CHARGE_KG,
     MAX_TAKEOFF_TIME_SEC,
     TAKE_OFF_VELOCITY_MPS,
