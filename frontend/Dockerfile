@@ -5,6 +5,7 @@ WORKDIR /golden_route/frontend
 COPY /frontend/package.json ./
 COPY /frontend/package-lock.json ./
 COPY /frontend/public ./public
+COPY /frontend/src ./src
 
 RUN npm install
 
@@ -12,4 +13,7 @@ COPY . .
 
 EXPOSE 3000
 
-CMD ["npm", "start"]
+RUN npm run build
+# install serve
+RUN npm install -g serve
+RUN serve -s build
