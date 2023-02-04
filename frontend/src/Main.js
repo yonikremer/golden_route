@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+import {Link} from "react-router-dom";
 
 const Main = () => {
     const [chargeMass, setChargeMass] = useState('');
@@ -93,6 +94,7 @@ const Main = () => {
                 If you cannot take off in time, the calculator will return the mass of the charge you need to destroy
                 in order to take off in time.
             </p>
+            <Link to="/Weather">Go to the weather page</Link>
             <form onSubmit={handleSubmit}>
                 <label>
                     Charge Mass (in kg):

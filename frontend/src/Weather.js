@@ -99,7 +99,7 @@ const Weather = () => {
 
                 If the weather is good, the message will also say at what time you can take off.
             </p>
-            <Link to="/">Go to main page</Link>
+            <Link to="/Main">Go to the main page</Link>
             <form onSubmit={handleSubmit}>
                 <label>
                     Date:
