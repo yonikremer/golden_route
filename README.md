@@ -42,3 +42,6 @@
 
 git clone https://github.com/yonikremer/golden_route.git
 docker-compose up -d --build
+
+עכשיו ניתן לגשת לאתר בכתובת:
+http://localhost:3000
